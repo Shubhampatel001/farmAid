@@ -65,8 +65,9 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.POST, "/api/feedback").hasRole(USER)
 						.requestMatchers(HttpMethod.GET, "/api/feedback/me").hasRole(USER)
 						.requestMatchers(HttpMethod.GET, "/api/feedback").hasRole(ADMIN)
-						// Delete: owner or admin, enforced in the service.
-						.requestMatchers(HttpMethod.DELETE, "/api/feedback/*").authenticated()
+						// Only the farmer who wrote it may delete feedback (ownership enforced in the service);
+						// admins can view but not delete.
+						.requestMatchers(HttpMethod.DELETE, "/api/feedback/*").hasRole(USER)
 
 						.requestMatchers("/api/users/me", "/api/users/me/**").authenticated()
 						.requestMatchers(HttpMethod.GET, "/api/users").hasRole(ADMIN)

@@ -5,12 +5,12 @@ import { errorMessage } from '../../core/http';
 import { Feedback } from '../../core/models';
 import { FeedbackService } from '../../core/services/api.services';
 import { ToastService } from '../../core/services/toast.service';
-import { ModalComponent } from '../../shared/modal.component';
 import { emojiFor } from '../../shared/ratings';
 
+/** Admin view of all feedback. Read-only: only the author can delete their feedback. */
 @Component({
   selector: 'app-adminviewfeedback',
-  imports: [FormsModule, DatePipe, ModalComponent],
+  imports: [FormsModule, DatePipe],
   templateUrl: './adminviewfeedback.component.html',
   styleUrl: './adminviewfeedback.component.css',
 })
@@ -22,8 +22,6 @@ export class AdminViewFeedbackComponent {
   protected readonly loading = signal(true);
   protected readonly feedback = signal<Feedback[]>([]);
   protected readonly search = signal('');
-  protected readonly toDelete = signal<Feedback | null>(null);
-  protected readonly deleting = signal(false);
 
   protected readonly filtered = computed(() => {
     const term = this.search().trim().toLowerCase();
@@ -42,22 +40,6 @@ export class AdminViewFeedbackComponent {
       error: (err) => {
         this.loading.set(false);
         this.toast.error(errorMessage(err, 'Could not load feedback.'));
-      },
-    });
-  }
-
-  protected confirmDelete(fb: Feedback): void {
-    this.deleting.set(true);
-    this.feedbackService.delete(fb.feedbackId).subscribe({
-      next: () => {
-        this.feedback.update((list) => list.filter((f) => f.feedbackId !== fb.feedbackId));
-        this.deleting.set(false);
-        this.toDelete.set(null);
-        this.toast.success('Feedback deleted.');
-      },
-      error: (err) => {
-        this.deleting.set(false);
-        this.toast.error(errorMessage(err));
       },
     });
   }

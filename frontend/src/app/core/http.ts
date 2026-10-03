@@ -1,10 +1,10 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { catchError, EMPTY, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { SKIP_SESSION_REDIRECT } from './http-context';
 import { ApiError } from './models';
 import { AuthService } from './services/auth.service';
-import { ToastService } from './services/toast.service';
 
 /** Adds the Bearer token to API requests. */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -16,17 +16,22 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 };
 
 /**
- * A 401 on a request that carried a token means the session is no longer valid: log out.
+ * A 401 on a request that carried a token means the session is no longer valid: end it (one message,
+ * redirect to /login) and complete the request without an error, so the page does not show a second message.
  * Other errors are left to the calling component, which knows how to present them.
  */
 export const sessionExpiryInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
-  const toast = inject(ToastService);
   return next(req).pipe(
     catchError((err: unknown) => {
-      if (err instanceof HttpErrorResponse && err.status === 401 && req.headers.has('Authorization')) {
-        toast.error('Your session has expired. Please log in again.');
-        auth.logout();
+      if (
+        err instanceof HttpErrorResponse &&
+        err.status === 401 &&
+        req.headers.has('Authorization') &&
+        !req.context.get(SKIP_SESSION_REDIRECT)
+      ) {
+        auth.endStaleSession(true);
+        return EMPTY;
       }
       return throwError(() => err);
     }),

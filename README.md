@@ -17,7 +17,7 @@ requested amount and a PNG/JPG/WEBP/PDF document (≤ 5 MB) · track status and 
 leave and manage feedback.
 
 **Administrators (ADMIN):** create, edit, deactivate and reactivate loan schemes · review all applications with filters ·
-approve or reject (remarks required on rejection) · view document previews · read and moderate feedback.
+approve or reject (remarks required on rejection) · view document previews · read all feedback (view only).
 
 **Security:** deny-by-default authorization, server-assigned roles (admins are seeded, never self-registered), ownership checks
 on every user-scoped resource, BCrypt passwords, stateless JWT, strict CORS, consistent JSON errors.
@@ -110,7 +110,7 @@ cd frontend && npx ng test --watch=false   # Vitest unit tests: guards, intercep
 | `GET /api/applications/{id}` (includes document) | owner or ADMIN |
 | `POST /api/feedback`, `GET /api/feedback/me` | USER |
 | `GET /api/feedback` | ADMIN |
-| `DELETE /api/feedback/{id}` | owner or ADMIN |
+| `DELETE /api/feedback/{id}` | USER, owner only (admins can view feedback but not delete it) |
 | `GET/PUT /api/users/me`, `PUT /api/users/me/password` | authenticated |
 | `GET /api/users` | ADMIN |
 

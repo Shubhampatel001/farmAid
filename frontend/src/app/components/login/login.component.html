@@ -46,6 +46,21 @@
         </button>
         <p class="mt-3 mb-0 text-center">New to FarmAid? <a routerLink="/signup">Create an account</a></p>
       </form>
+
+      @if (demoAccounts.length) {
+        <div class="demo-accounts mt-4 p-3 border rounded bg-light">
+          <p class="fw-semibold mb-1">🎯 Demo accounts – click to fill in</p>
+          <p class="small text-muted mb-2">Sample data resets whenever the demo restarts.</p>
+          <div class="d-grid gap-2">
+            @for (account of demoAccounts; track account.email) {
+              <button type="button" class="btn btn-outline-success btn-sm text-start" (click)="useDemoAccount(account)">
+                <strong>{{ account.label }}</strong> · {{ account.email }}
+                <span class="d-block small text-muted">{{ account.note }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
     </div>
   </div>
 </div>

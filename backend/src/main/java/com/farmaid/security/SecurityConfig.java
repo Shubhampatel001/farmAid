@@ -71,6 +71,10 @@ public class SecurityConfig {
 						.requestMatchers("/api/users/me", "/api/users/me/**").authenticated()
 						.requestMatchers(HttpMethod.GET, "/api/users").hasRole(ADMIN)
 
+						// Static frontend files and client-side routes (only present in the bundled demo image).
+						.requestMatchers(request -> HttpMethod.GET.matches(request.getMethod())
+								&& !request.getRequestURI().startsWith("/api/")).permitAll()
+
 						.anyRequest().denyAll())
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();

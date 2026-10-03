@@ -64,6 +64,32 @@ logging:
     com.farmaid: DEBUG
 
 ---
+# Self-contained public demo: in-memory H2, demo accounts and sample data, resets on every restart.
+# Used by the root Dockerfile (which also bundles the Angular site). Needs no environment variables.
+spring:
+  config:
+    activate:
+      on-profile: demo
+  datasource:
+    url: jdbc:h2:mem:farmaid;MODE=MySQL;DATABASE_TO_LOWER=TRUE;NON_KEYWORDS=DATE,DATA,VALUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    # H2 reports MySQL LONGTEXT as VARCHAR; the schema still comes from the same Flyway migrations.
+    hibernate:
+      ddl-auto: none
+app:
+  jwt:
+    # A fresh random key per start is fine: all data (and sessions) reset on restart anyway.
+    secret: ${JWT_SECRET:${random.value}${random.value}}
+  # Fixed on purpose: these accounts are advertised on the demo login page.
+  admin:
+    email: admin@farmaid.demo
+    password: Admin@123
+  demo:
+    farmer-password: Farmer@123
+
+---
 spring:
   config:
     activate:

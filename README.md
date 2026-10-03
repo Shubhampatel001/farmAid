@@ -51,6 +51,27 @@ On first start Flyway creates the schema and seeds four sample loan schemes, and
 
 **Everything in Docker:** `docker compose --profile full up --build` → http://localhost:8081
 
+## Public demo (single container)
+
+The root `Dockerfile` builds a self-contained demo: the Angular site served by Spring Boot, an in-memory H2
+database and sample data. It needs **no database and no environment variables**, and data **resets on every restart**.
+
+```bash
+docker build -t farmaid-demo .
+docker run -p 8080:8080 farmaid-demo      # http://localhost:8080
+```
+
+Demo accounts (also shown on the login page):
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@farmaid.demo` | `Admin@123` |
+| Farmer | `ravi@farmaid.demo`, `priya@farmaid.demo`, `arjun@farmaid.demo` | `Farmer@123` |
+
+**Deploy on Render (free):** New → Web Service → this repo → Language **Docker**, Root Directory empty,
+Dockerfile Path `./Dockerfile`, Health Check Path `/actuator/health`, Free instance, no environment variables.
+Free instances sleep when idle, so the first visit after a while takes about a minute.
+
 ## Configuration
 
 | Variable | Purpose |

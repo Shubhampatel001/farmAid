@@ -123,6 +123,36 @@ describe('core', () => {
       expect(router.url).toBe('/login?returnUrl=%2Fmy%2Fapplications');
     });
 
+    function switchAccount(auth: AuthService) {
+      auth.login({ email: 'admin@x.in', password: 'x' }).subscribe();
+      TestBed.inject(HttpTestingController).expectOne('/api/auth/login').flush({
+        token: 'new-token', expiresAt: Date.now() + 60_000, userId: 2, username: 'Admin', role: 'ADMIN',
+      });
+    }
+
+    it('ignores a late startup reply for an account the user has since switched away from', async () => {
+      const { auth, req } = await start('/');
+      switchAccount(auth);
+      req.flush({ userId: 1, email: 'r@x.in', username: 'Ravi Kumar', mobileNumber: '9876543210', role: 'USER' });
+      expect(auth.currentUser()?.username).toBe('Admin');
+      expect(auth.role()).toBe('ADMIN');
+    });
+
+    it('does not log out a newer account when the old login is rejected late', async () => {
+      const { auth, req } = await start('/');
+      // A page request sent with the old login, answered only after the user switched accounts.
+      TestBed.inject(HttpClient).get('/api/applications/me').subscribe();
+      const oldPageRequest = TestBed.inject(HttpTestingController).expectOne('/api/applications/me');
+      expect(oldPageRequest.request.headers.get('Authorization')).toBe('Bearer tok');
+      switchAccount(auth);
+      oldPageRequest.flush({}, { status: 401, statusText: 'Unauthorized' });
+      req.flush({}, { status: 401, statusText: 'Unauthorized' });
+      await new Promise((r) => setTimeout(r));
+      expect(auth.isLoggedIn()).toBe(true);
+      expect(auth.token).toBe('new-token');
+      expect(TestBed.inject(ToastService).toasts().length).toBe(0);
+    });
+
     it('keeps the login when the server cannot be reached', async () => {
       const { auth, req } = await start('/');
       req.error(new ProgressEvent('error'), { status: 0 });

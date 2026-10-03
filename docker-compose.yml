@@ -21,7 +21,8 @@ services:
       MYSQL_USER: ${DB_USER:-farmaid}
       MYSQL_PASSWORD: ${DB_PASSWORD:-change-me}
     ports:
-      - "3306:3306"
+      # Only reachable from this computer: the defaults above are public, so never expose MySQL to the network.
+      - "127.0.0.1:3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:

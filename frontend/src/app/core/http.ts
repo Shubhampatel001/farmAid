@@ -24,13 +24,10 @@ export const sessionExpiryInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   return next(req).pipe(
     catchError((err: unknown) => {
-      if (
-        err instanceof HttpErrorResponse &&
-        err.status === 401 &&
-        req.headers.has('Authorization') &&
-        !req.context.get(SKIP_SESSION_REDIRECT)
-      ) {
-        auth.endStaleSession(true);
+      const sentToken = req.headers.get('Authorization')?.replace(/^Bearer /, '');
+      if (err instanceof HttpErrorResponse && err.status === 401 && sentToken && !req.context.get(SKIP_SESSION_REDIRECT)) {
+        // Only ends the session if this request was sent with the login that is still active.
+        auth.endStaleSession(sentToken, true);
         return EMPTY;
       }
       return throwError(() => err);

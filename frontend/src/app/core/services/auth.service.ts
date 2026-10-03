@@ -50,17 +50,19 @@ export class AuthService {
    * - accepted: refresh the stored name and role;
    * - 401: drop the login quietly, and send the user to /login only if they are on a protected page;
    * - network error or server still waking up: keep the login.
+   * The reply only applies if the same login is still active (the user may have switched accounts meanwhile).
    */
   validateSession(): void {
     if (!this.isLoggedIn()) return;
+    const token = this.session()!.token;
     const context = new HttpContext().set(SKIP_SESSION_REDIRECT, true);
     this.http.get<User>(`${environment.apiUrl}/users/me`, { context }).subscribe({
       next: (user) => {
         const current = this.session();
-        if (current) this.store({ ...current, username: user.username, role: user.role });
+        if (current?.token === token) this.store({ ...current, username: user.username, role: user.role });
       },
       error: (err: unknown) => {
-        if (err instanceof HttpErrorResponse && err.status === 401) this.endStaleSession(false);
+        if (err instanceof HttpErrorResponse && err.status === 401) this.endStaleSession(token, false);
       },
     });
   }
@@ -68,10 +70,11 @@ export class AuthService {
   /**
    * Clears a login the server no longer accepts. Several requests can fail at once (e.g. the startup
    * check and the page's own data request), so only the first call clears the session and shows a message.
+   * @param failedToken the token the rejected request was sent with; ignored if a different login is now active.
    * @param alwaysGoToLogin true when a page's own request failed; false sends to /login only from protected pages.
    */
-  endStaleSession(alwaysGoToLogin: boolean): void {
-    if (!this.session()) return;
+  endStaleSession(failedToken: string, alwaysGoToLogin: boolean): void {
+    if (this.session()?.token !== failedToken) return;
     this.store(null);
     this.toast.info('Your session has ended. Please log in again.');
     if (alwaysGoToLogin || this.onProtectedPage()) {

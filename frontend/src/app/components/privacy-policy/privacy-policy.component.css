@@ -1,0 +1,43 @@
+/* Ensure full height layout */
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  /* Flex layout for page */
+  .page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Main content grows to fill space */
+  .page-content {
+    flex: 1;
+  }
+  
+  /* Privacy container styling */
+  .privacy-container {
+    max-width: 800px;
+    width: 100%;
+    margin: 2rem auto;
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+    animation: fadeIn 0.8s ease-in-out;
+    background: linear-gradient(to right, #e8f5e9, #fffde7);
+  
+    /* Added height */
+    min-height: 400px; /* You can adjust this value as needed */
+  }
+  
+  
+  /* Footer attached to bottom */
+  app-footer {
+    background-color: #f1f1f1;
+    padding: 1rem;
+    /* text-align: center; */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  }
+  

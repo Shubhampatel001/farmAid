@@ -1,0 +1,104 @@
+# 🌾 FarmAid
+
+FarmAid is a web platform where farmers discover agricultural loan schemes, apply online with supporting
+documents and track their applications, while administrators manage schemes, review applications and read feedback.
+
+| Layer | Stack |
+|---|---|
+| Frontend | Angular 21 (standalone components, signals, zoneless), Bootstrap 5, Vitest |
+| Backend | Spring Boot 3.5, Java 21, Spring Security + JWT (jjwt 0.13), Spring Data JPA, Flyway, springdoc OpenAPI |
+| Database | MySQL 8.4 |
+| Ops | Docker / docker compose, GitHub Actions |
+
+## Features
+
+**Farmers (USER):** register and log in · browse and search active loan schemes · EMI calculator · apply with farm details,
+requested amount and a PNG/JPG/WEBP/PDF document (≤ 5 MB) · track status and officer remarks · cancel pending applications ·
+leave and manage feedback.
+
+**Administrators (ADMIN):** create, edit, deactivate and reactivate loan schemes · review all applications with filters ·
+approve or reject (remarks required on rejection) · view document previews · read and moderate feedback.
+
+**Security:** deny-by-default authorization, server-assigned roles (admins are seeded, never self-registered), ownership checks
+on every user-scoped resource, BCrypt passwords, stateless JWT, strict CORS, consistent JSON errors.
+
+## Project layout
+
+```
+backend/    Spring Boot API (com.farmaid: controller, service, repository, model, dto, mapper, security, exception, config)
+frontend/   Angular app (core: models, services, guards, interceptors · shared: modal, pagination, … · components: pages)
+docker-compose.yml   MySQL for development; add --profile full for the whole stack
+.env.example         all configuration variables
+```
+
+## Running locally
+
+Prerequisites: **JDK 21+**, **Node 24.15+** (Node 24.12 works with Angular 21; Angular 22 needs 24.15+), **Docker Desktop**.
+
+```bash
+cp .env.example .env              # then set real passwords and a JWT secret (openssl rand -base64 48)
+docker compose up -d mysql        # MySQL on localhost:3306
+
+cd backend && ./mvnw spring-boot:run          # API on http://localhost:8080 (reads ../.env)
+cd frontend && npm install && npm start       # UI on http://localhost:4200, /api proxied to :8080
+```
+
+On first start Flyway creates the schema and seeds four sample loan schemes, and the admin account from
+`ADMIN_EMAIL` / `ADMIN_PASSWORD` is created.
+
+- Swagger UI: http://localhost:8080/swagger-ui.html (disabled in the `prod` profile)
+- Health: http://localhost:8080/actuator/health
+
+**Everything in Docker:** `docker compose --profile full up --build` → http://localhost:8081
+
+## Configuration
+
+| Variable | Purpose |
+|---|---|
+| `DB_URL`, `DB_USER`, `DB_PASSWORD` | MySQL connection |
+| `JWT_SECRET` | ≥ 32 bytes, base64 recommended. **Required** outside the `dev` profile |
+| `JWT_EXPIRATION_MINUTES` | Token lifetime (default 300) |
+| `CORS_ALLOWED_ORIGINS` | Comma-separated frontend origins, e.g. `https://farmaid.example` |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Initial administrator (created once if missing) |
+| `SPRING_PROFILES_ACTIVE` | `dev` (default) or `prod` |
+| `PORT` | HTTP port (default 8080) |
+
+## Tests
+
+```bash
+cd backend && ./mvnw verify       # API integration tests (H2 in MySQL mode): auth, roles, ownership, lifecycle rules
+cd frontend && npx ng test --watch=false   # Vitest unit tests: guards, interceptor, EMI, filtering, pagination
+```
+
+> Windows note: Vitest cannot find spec files when the project path contains parentheses (e.g. `FarmAid (GIT HUB)`).
+> Run the tests from a path without them (or a directory junction). CI is unaffected.
+
+## API overview
+
+| Method & path | Access |
+|---|---|
+| `POST /api/auth/register`, `POST /api/auth/login` | public |
+| `GET /api/loans`, `GET /api/loans/{id}`, `GET /api/location/states`, `GET /api/location/districts?state=` | public |
+| `POST /api/loans`, `PUT /api/loans/{id}`, `PATCH /api/loans/{id}/status?active=` | ADMIN |
+| `POST /api/applications`, `GET /api/applications/me`, `PATCH /api/applications/{id}/cancel` | USER |
+| `GET /api/applications?status=`, `PATCH /api/applications/{id}/decision` | ADMIN |
+| `GET /api/applications/{id}` (includes document) | owner or ADMIN |
+| `POST /api/feedback`, `GET /api/feedback/me` | USER |
+| `GET /api/feedback` | ADMIN |
+| `DELETE /api/feedback/{id}` | owner or ADMIN |
+| `GET/PUT /api/users/me`, `PUT /api/users/me/password` | authenticated |
+| `GET /api/users` | ADMIN |
+
+## Deployment
+
+Suggested low-cost setup: frontend on Cloudflare Pages / Netlify (SPA fallback to `index.html`, rewrite `/api/*` to the backend),
+backend Docker image on Railway / Render / Fly.io with `SPRING_PROFILES_ACTIVE=prod`, and a managed MySQL database.
+Set `CORS_ALLOWED_ORIGINS` to the frontend URL, or set `apiUrl` in `frontend/src/environments/environment.prod.ts`
+if the API lives on another domain.
+
+## Roadmap
+
+- Move uploaded documents to object storage (S3 / Cloudflare R2) instead of the database
+- Email notifications on application decisions; password reset
+- Server-side pagination for large application lists
+- Hindi / Odia translations; Playwright end-to-end tests

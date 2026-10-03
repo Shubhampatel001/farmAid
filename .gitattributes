@@ -1,0 +1,15 @@
+# Normalise text to LF in the repository.
+* text=auto
+
+# Shell scripts must keep LF even on Windows checkouts (used inside Docker/Linux CI).
+mvnw text eol=lf
+*.sh text eol=lf
+Dockerfile text eol=lf
+
+# Windows scripts keep CRLF.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+*.jar binary
+*.ico binary
+*.png binary

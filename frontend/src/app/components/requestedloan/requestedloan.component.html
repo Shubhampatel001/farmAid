@@ -1,0 +1,123 @@
+<div class="container-fluid px-3 px-md-4 py-3">
+  <h3 class="mb-4 text-success">Requested Loans</h3>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <label for="searchText" class="form-label">Search</label>
+      <input id="searchText" type="text" class="form-control" placeholder="Search by farmer, loan type or purpose"
+        [ngModel]="search()" (ngModelChange)="search.set($event)" />
+    </div>
+    <div class="col-md-6">
+      <label for="status" class="form-label">Status</label>
+      <select id="status" class="form-select" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+        <option value="">All</option>
+        @for (s of statuses; track s) {
+          <option [value]="s">{{ s.charAt(0) + s.slice(1).toLowerCase() }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="text-center py-5"><span class="spinner-border text-success"></span></div>
+  } @else if (filtered().length === 0) {
+    <div class="alert alert-warning">No applications found.</div>
+  } @else {
+    <div class="table-wrapper table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Sl no</th>
+            <th>Submitted</th>
+            <th>Farmer</th>
+            <th>Loan</th>
+            <th>Amount (₹)</th>
+            <th>Purpose</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (app of pager.items(); track app.loanApplicationId; let i = $index) {
+            <tr>
+              <td>{{ pager.offset() + i + 1 }}</td>
+              <td>{{ app.submissionDate | date: 'mediumDate' }}</td>
+              <td>{{ app.user.username }}</td>
+              <td>{{ app.loan.loanType }}</td>
+              <td>{{ app.requestedAmount | number }}</td>
+              <td>{{ app.farmPurpose }}</td>
+              <td><app-status-badge [status]="app.status" /></td>
+              <td class="text-nowrap">
+                <button class="btn btn-sm btn-success me-2" [disabled]="app.status !== 'PENDING'" (click)="openDecision(app, 'APPROVED')">Approve</button>
+                <button class="btn btn-sm btn-danger me-2" [disabled]="app.status !== 'PENDING'" (click)="openDecision(app, 'REJECTED')">Reject</button>
+                <button class="btn btn-sm btn-info" (click)="showDetails(app)">Show</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-pagination [page]="pager.page()" [totalPages]="pager.totalPages()" (pageChange)="pager.page.set($event)" />
+  }
+</div>
+
+@if (selected(); as app) {
+  <app-modal title="Application #{{ app.loanApplicationId }}" size="lg" (closed)="selected.set(null)">
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Status:</strong> <app-status-badge [status]="app.status" /></p>
+        <p><strong>Submitted:</strong> {{ app.submissionDate | date: 'mediumDate' }}</p>
+        <p><strong>Farmer:</strong> {{ app.user.username }} ({{ app.user.email }}, {{ app.user.mobileNumber }})</p>
+        <p><strong>Loan:</strong> {{ app.loan.loanType }} (max ₹{{ app.loan.maximumAmount | number }})</p>
+        <p><strong>Requested amount:</strong> ₹{{ app.requestedAmount | number }}</p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>State / District:</strong> {{ app.state }} / {{ app.district }}</p>
+        <p><strong>Farm location:</strong> {{ app.farmLocation }}</p>
+        <p><strong>Address:</strong> {{ app.farmerAddress }}</p>
+        <p><strong>Farm size:</strong> {{ app.farmSizeInAcres }} acres</p>
+        <p><strong>Purpose:</strong> {{ app.farmPurpose }}</p>
+      </div>
+    </div>
+    @if (app.adminRemarks) {
+      <p><strong>Remarks:</strong> {{ app.adminRemarks }}</p>
+    }
+    <hr />
+    <p><strong>Supporting document:</strong></p>
+    @if (loadingDocument()) {
+      <span class="spinner-border spinner-border-sm text-success"></span>
+    } @else if (app.file) {
+      <app-document-preview [file]="app.file" [fileName]="'application-' + app.loanApplicationId" />
+    } @else {
+      <span class="text-muted">No document attached.</span>
+    }
+    <ng-container modal-footer>
+      @if (app.status === 'PENDING') {
+        <button class="btn btn-success" (click)="openDecision(app, 'APPROVED')">Approve</button>
+        <button class="btn btn-danger" (click)="openDecision(app, 'REJECTED')">Reject</button>
+      }
+      <button class="btn btn-secondary" (click)="selected.set(null)">Close</button>
+    </ng-container>
+  </app-modal>
+}
+
+@if (decision(); as d) {
+  <app-modal [title]="d.status === 'APPROVED' ? 'Approve application' : 'Reject application'"
+    [variant]="d.status === 'APPROVED' ? 'default' : 'danger'" (closed)="decision.set(null)">
+    <p>
+      {{ d.status === 'APPROVED' ? 'Approve' : 'Reject' }} the <strong>{{ d.app.loan.loanType }}</strong> application from
+      <strong>{{ d.app.user.username }}</strong> for ₹{{ d.app.requestedAmount | number }}?
+    </p>
+    <label for="remarks" class="form-label">Remarks {{ d.status === 'REJECTED' ? '(required)' : '(optional)' }}</label>
+    <textarea id="remarks" class="form-control" rows="3" maxlength="1000" [ngModel]="remarks()" (ngModelChange)="remarks.set($event)"
+      placeholder="Shown to the farmer"></textarea>
+    <ng-container modal-footer>
+      <button class="btn btn-secondary" (click)="decision.set(null)">Cancel</button>
+      <button class="btn" [class]="d.status === 'APPROVED' ? 'btn-success' : 'btn-danger'"
+        [disabled]="deciding() || (d.status === 'REJECTED' && !remarks().trim())" (click)="confirmDecision()">
+        @if (deciding()) { <span class="spinner-border spinner-border-sm me-2"></span> }
+        Confirm
+      </button>
+    </ng-container>
+  </app-modal>
+}

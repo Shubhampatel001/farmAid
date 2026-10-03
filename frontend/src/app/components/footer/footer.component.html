@@ -1,0 +1,43 @@
+<footer class="homepage-footer text-light pt-5 pb-3" style="background-color: #437057;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <h5 class="fw-bold">📬 Contact Us</h5>
+        <p class="mb-1"><i class="bi bi-envelope-fill me-2"></i>support&#64;farmaid.com</p>
+        <p><i class="bi bi-telephone-fill me-2"></i> +91 98765 43210</p>
+        <p><i class="bi bi-geo-alt-fill me-2"></i> Bengaluru, India</p>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h5 class="fw-bold">🔗 Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a routerLink="/about" class="text-light text-decoration-none">About Us</a></li>
+          <li><a routerLink="/services" class="text-light text-decoration-none">Services</a></li>
+          <li><a routerLink="/loans" class="text-light text-decoration-none">Loan Schemes</a></li>
+          <li><a routerLink="/contact" class="text-light text-decoration-none">Support</a></li>
+          <li><a routerLink="/privacy" class="text-light text-decoration-none">Privacy Policy</a></li>
+          <li><a routerLink="/terms" class="text-light text-decoration-none">Terms of Service</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h5 class="fw-bold">📱 Follow Us</h5>
+        <div class="d-flex gap-3 mb-3 fs-4">
+          <a href="https://facebook.com/farmaid" target="_blank" rel="noopener" class="text-light" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="https://twitter.com/farmaid" target="_blank" rel="noopener" class="text-light" aria-label="X / Twitter"><i class="bi bi-twitter-x"></i></a>
+          <a href="https://instagram.com/farmaid" target="_blank" rel="noopener" class="text-light" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+        </div>
+
+        <h5 class="fw-bold">📰 Newsletter</h5>
+        <form #newsletter="ngForm" class="d-flex flex-column flex-sm-row gap-2" (ngSubmit)="subscribe(newsletter)">
+          <input type="email" name="email" ngModel email required class="form-control" placeholder="Enter your email" aria-label="Email">
+          <button type="submit" class="btn btn-warning" [disabled]="newsletter.invalid">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <hr class="bg-light" />
+    <div class="text-center">
+      <p class="mb-0">&copy; {{ year }} <strong>Farm Aid</strong>. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

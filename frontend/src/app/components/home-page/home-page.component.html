@@ -1,0 +1,52 @@
+<div class="homepage-wrapper">
+  <section class="homepage-main hero-section">
+    <div class="carousel slide" style="background: transparent;" aria-live="polite">
+      <div class="carousel-inner text-center">
+        @for (quote of quotes; track quote.author; let i = $index) {
+          <div class="carousel-item" [class.active]="i === activeQuote()">
+            <blockquote class="blockquote">
+              <p class="mb-2">"{{ quote.text }}"</p>
+              <footer class="blockquote-footer">{{ quote.author }}</footer>
+            </blockquote>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="container text-center hero-content text-light py-5 mt-5">
+      <h1 class="display-4 fw-bold">Welcome to Farm Aid</h1>
+      <p class="lead mt-3">Empowering farmers with tools, resources, and community support.</p>
+      <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+        <a class="btn btn-warning btn-lg" routerLink="/loans">🌾 Browse Loan Schemes</a>
+        <a class="btn btn-outline-light btn-lg" routerLink="/services">🌱 Explore Services</a>
+      </div>
+    </div>
+
+    <div class="container my-5">
+      <div class="row text-center">
+        <div class="col-md-4 mb-4">
+          <i class="bi bi-cash-coin fs-1 feature-icon"></i>
+          <div class="mt-3 bg-white text-dark rounded p-3 feature-card">
+            <h4>Easy Loans</h4>
+            <p>Compare government-backed agricultural loans and apply online in minutes.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <i class="bi bi-clipboard-check fs-1 feature-icon"></i>
+          <div class="mt-3 bg-white text-dark rounded p-3 feature-card">
+            <h4>Track Applications</h4>
+            <p>Follow every application from submission to approval, with remarks from our team.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <i class="bi bi-people fs-1 feature-icon"></i>
+          <div class="mt-3 bg-white text-dark rounded p-3 feature-card">
+            <h4>Community</h4>
+            <p>Share your experience and help us improve support for farmers everywhere.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<app-footer />

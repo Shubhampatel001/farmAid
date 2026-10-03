@@ -1,0 +1,70 @@
+<div class="container mt-4 mb-5">
+  <div class="card">
+    <div class="card-header">
+      <h3>{{ isEdit() ? 'Update Loan' : 'Create New Loan' }}</h3>
+    </div>
+    <div class="loan-form-body">
+      @if (loadingLoan()) {
+        <div class="text-center py-5"><span class="spinner-border text-success"></span></div>
+      } @else {
+        <form [formGroup]="loanForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="mb-3">
+            <label for="loanType">Loan Type*</label>
+            <input id="loanType" class="form-control" formControlName="loanType" placeholder="e.g. Kisan Crop Loan" />
+            @if (invalid('loanType')) { <div class="error-message">*Loan type is required</div> }
+          </div>
+
+          <div class="mb-3">
+            <label for="description">Description*</label>
+            <textarea id="description" class="form-control" rows="3" formControlName="description" placeholder="What the loan can be used for"></textarea>
+            @if (invalid('description')) { <div class="error-message">*Description is required</div> }
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="interestRate">Interest Rate (% p.a.)*</label>
+              <input id="interestRate" class="form-control" formControlName="interestRate" type="number" step="0.01" min="0" placeholder="e.g. 7.5" />
+              @if (invalid('interestRate')) { <div class="error-message">*Enter a rate between 0.01 and 100</div> }
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="maximumAmount">Maximum Amount (₹)*</label>
+              <input id="maximumAmount" class="form-control" formControlName="maximumAmount" type="number" min="1" placeholder="e.g. 300000" />
+              @if (invalid('maximumAmount')) { <div class="error-message">*Enter a positive amount</div> }
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="repaymentTenure">Repayment Tenure*</label>
+            <select id="repaymentTenure" class="form-control" formControlName="repaymentTenure">
+              <option [ngValue]="null" disabled>Select tenure (months)</option>
+              @for (month of months; track month) {
+                <option [ngValue]="month">{{ month }} months</option>
+              }
+            </select>
+            @if (invalid('repaymentTenure')) { <div class="error-message">*Repayment tenure is required</div> }
+          </div>
+
+          <div class="mb-3">
+            <label for="eligibility">Eligibility*</label>
+            <input id="eligibility" class="form-control" formControlName="eligibility" placeholder="Who can apply" />
+            @if (invalid('eligibility')) { <div class="error-message">*Eligibility is required</div> }
+          </div>
+
+          <div class="mb-3">
+            <label for="documentsRequired">Documents Required*</label>
+            <input id="documentsRequired" class="form-control" formControlName="documentsRequired" placeholder="e.g. Aadhaar card, land records" />
+            @if (invalid('documentsRequired')) { <div class="error-message">*Documents required is required</div> }
+          </div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-success" [disabled]="saving()">
+              @if (saving()) { <span class="spinner-border spinner-border-sm me-2"></span> }
+              {{ isEdit() ? 'Update' : 'Submit' }}
+            </button>
+            <a class="btn btn-outline-secondary" routerLink="/admin/loans">Cancel</a>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>

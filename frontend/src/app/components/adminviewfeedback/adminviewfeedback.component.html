@@ -1,0 +1,50 @@
+<div class="admin-feedback-container">
+  <h1 class="admin-title">All Feedback</h1>
+
+  <div class="admin-search-bar">
+    <input type="text" placeholder="🔍 Search by name, user ID or text" aria-label="Search feedback"
+      [ngModel]="search()" (ngModelChange)="search.set($event)" />
+    @if (search()) {
+      <button class="clear-btn" (click)="search.set('')">Clear</button>
+    }
+  </div>
+
+  <div class="feedback-container">
+    @if (loading()) {
+      <div class="text-center py-5"><span class="spinner-border text-success"></span></div>
+    } @else {
+      <div class="feedback-grid">
+        @for (feedback of filtered(); track feedback.feedbackId; let i = $index) {
+          <div class="feedback-card">
+            <div class="card-header">
+              <div class="avatar">{{ i + 1 }}</div>
+              <div class="meta">
+                <h4>{{ feedback.username }} <small class="text-muted">(ID {{ feedback.userId }})</small></h4>
+                <p>Date: {{ feedback.date | date: 'mediumDate' }}</p>
+              </div>
+              <div class="emoji" [title]="feedback.rating + '/5'">{{ emojiFor(feedback.rating) }}</div>
+            </div>
+            <div class="card-body">
+              <p class="feedback-text">“{{ feedback.feedbackText }}”</p>
+              <button class="btn btn-sm btn-outline-danger" (click)="toDelete.set(feedback)">🗑 Delete</button>
+            </div>
+          </div>
+        } @empty {
+          <div class="no-results">
+            {{ search() ? 'No feedback found for "' + search() + '"' : 'No feedback yet.' }}
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+@if (toDelete(); as fb) {
+  <app-modal title="Delete feedback" variant="danger" (closed)="toDelete.set(null)">
+    Delete this feedback from <strong>{{ fb.username }}</strong>? This cannot be undone.
+    <ng-container modal-footer>
+      <button class="btn btn-secondary" (click)="toDelete.set(null)">Cancel</button>
+      <button class="btn btn-danger" [disabled]="deleting()" (click)="confirmDelete(fb)">Delete</button>
+    </ng-container>
+  </app-modal>
+}

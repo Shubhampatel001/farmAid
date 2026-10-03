@@ -1,0 +1,39 @@
+<nav class="navbar shadow-sm" style="background-color: #437057;">
+  <div class="container-fluid flex-wrap gap-2">
+    <a class="navbar-brand fw-bold text-light" routerLink="/loans">🌾 FARM AID</a>
+    <div class="ms-auto d-flex flex-wrap align-items-center gap-2">
+      <span class="text-light small d-none d-md-inline">Hi, {{ auth.currentUser()?.username }}</span>
+      <div class="dropdown">
+        <button class="btn btn-outline-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Loan
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
+          <li><a class="dropdown-item" routerLink="/loans">View Loans</a></li>
+          <li><a class="dropdown-item" routerLink="/my/applications">Applied Loans</a></li>
+        </ul>
+      </div>
+
+      <div class="dropdown">
+        <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Feedback
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
+          <li><a class="dropdown-item" routerLink="/my/feedback/new">Add Feedback</a></li>
+          <li><a class="dropdown-item" routerLink="/my/feedback">View My Feedbacks</a></li>
+        </ul>
+      </div>
+
+      <button class="btn btn-warning" (click)="showLogout.set(true)">Logout</button>
+    </div>
+  </div>
+</nav>
+
+@if (showLogout()) {
+  <app-modal title="Confirm Logout" variant="warning" (closed)="showLogout.set(false)">
+    Are you sure you want to logout?
+    <ng-container modal-footer>
+      <button type="button" class="btn btn-secondary" (click)="showLogout.set(false)">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="logout()">Logout</button>
+    </ng-container>
+  </app-modal>
+}

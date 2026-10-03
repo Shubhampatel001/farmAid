@@ -1,0 +1,40 @@
+<div class="background-image"></div>
+
+<div class="feedback-wrapper">
+  <form [formGroup]="feedbackForm" (ngSubmit)="addFeedback()" class="feedback-card" novalidate>
+    <h2><b>Share Your Thoughts on <span class="highlight">FarmAid</span></b></h2>
+
+    <div class="form-group">
+      <label for="feedback">Your Feedback</label>
+      <textarea id="feedback" formControlName="feedbackText" maxlength="2000"
+        placeholder="Write your thoughts about the support, the mission, or suggestions..."></textarea>
+      @if (feedbackForm.controls.feedbackText.touched) {
+        @if (feedbackForm.controls.feedbackText.hasError('required')) {
+          <div class="error-message">Feedback is required.</div>
+        } @else if (feedbackForm.controls.feedbackText.hasError('minlength')) {
+          <div class="error-message">Feedback must be at least 4 characters long.</div>
+        }
+      }
+    </div>
+
+    <label id="rating-label">Rate Your Experience</label>
+    <div class="emoji-options" role="radiogroup" aria-labelledby="rating-label">
+      @for (option of ratings; track option.value) {
+        <span role="radio" tabindex="0" [attr.aria-checked]="feedbackForm.controls.rating.value === option.value" [attr.aria-label]="option.label"
+          [title]="option.label" [class.selected]="feedbackForm.controls.rating.value === option.value"
+          (click)="feedbackForm.controls.rating.setValue(option.value)" (keydown.enter)="feedbackForm.controls.rating.setValue(option.value)">
+          {{ option.emoji }}
+        </span>
+      }
+    </div>
+    @if (submitted() && feedbackForm.controls.rating.invalid) {
+      <div class="error-message">Please choose a rating.</div>
+    }
+
+    <button type="submit" [disabled]="saving()">
+      @if (saving()) { <span class="spinner-border spinner-border-sm me-2"></span> }
+      🚀 Submit Feedback
+    </button>
+  </form>
+</div>
+<app-footer />

@@ -1,0 +1,16 @@
+<div class="page-wrapper">
+  <section class="page-content">
+    <div class="container">
+      <h2>🛠️ Your Digital Farmhand, 24/7</h2>
+      <div class="card-grid">
+        @for (service of services; track service.title) {
+          <div class="service-card">
+            <h4>{{ service.icon }} {{ service.title }}</h4>
+            <p>{{ service.desc }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+</div>
+<app-footer />

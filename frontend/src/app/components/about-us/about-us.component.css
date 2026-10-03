@@ -1,0 +1,33 @@
+/* Full height layout */
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  /* Flex layout for the full page */
+  .page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Main content grows to fill space */
+  .page-content {
+    flex: 1;
+  }
+  
+  /* Optional: container styling */
+  .container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+  
+  /* Footer styling */
+  app-footer {
+    background-color: #f1f1f1;
+    padding: 1rem;
+    /* text-align: center; */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  }
+  

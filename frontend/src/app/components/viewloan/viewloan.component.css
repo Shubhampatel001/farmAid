@@ -1,0 +1,207 @@
+/* Loan Container */
+.loan-container {
+  margin: 30px auto;
+  max-width: 1000px;
+  padding: 25px;
+  background: linear-gradient(to bottom right, #e6f0e6, #ffffff);
+ 
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(47, 82, 73, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Centered Heading */
+.center {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  color: #2F5249;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #97B067;
+  background-color: #f9f9f9;
+  flex: 1;
+  min-width: 200px;
+  transition: border 0.3s;
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: #437057;
+  outline: none;
+}
+
+/* Loan Table */
+.loan-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.loan-table th,
+.loan-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.loan-table th {
+  background-color: #437057;
+  color: white;
+  font-weight: 600;
+}
+
+.loan-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 14px;
+  margin: 2px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.3s ease-in-out;
+  display: inline-block;
+}
+
+/* Edit Button */
+.btn-edit {
+  background-color: #f5af17;
+}
+
+.btn-edit:hover {
+  background-color: #ba8615;
+  transform: scale(1.05);
+}
+
+/* Delete Button */
+.btn-delete {
+  background-color: #dc3545;
+}
+
+.btn-delete:hover {
+  background-color: #b02a37;
+  transform: scale(1.05);
+}
+
+/* Action Cell Styling */
+.loan-table td:last-child {
+  white-space: nowrap;
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+  }
+
+  .filters input,
+  .filters select {
+    width: 100%;
+  }
+}
+
+/* Modal Styling */
+.modal-content {
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Success and Delete Modal Headers */
+.modal-header.bg-danger,
+.modal-header.bg-success {
+  color: #E3DE61;
+  background-color: #2F5249;
+  border-bottom: 1px solid #97B067;
+}
+
+/* Modal Title */
+.modal-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+/* Modal Body */
+.modal-body {
+  font-size: 16px;
+  color: #437057;
+}
+
+/* Modal Footer Buttons */
+.modal-footer .btn {
+  min-width: 100px;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #97B067;
+  border: none;
+  color: #fff;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #437057;
+}
+
+.modal-footer .btn-danger {
+  background-color: #E3DE61;
+  border: none;
+  color: #2F5249;
+  font-weight: bold;
+}
+
+.modal-footer .btn-danger:hover {
+  background-color: #d4c94f;
+}
+
+/* Close Button */
+.btn-close {
+  filter: invert(100%);
+}
+
+/* Remove dark backdrop */
+.modal-backdrop {
+  background-color: transparent !important;
+}
+/* Pagination Controls */
+.pagination-controls .btn {
+  color: #2F5249; /* Dark green text */
+  border-color: #97B067; /* Soft green border */
+  background-color: #ffffff;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.pagination-controls .btn:hover {
+  background-color: #E3DE61; /* Yellow hover */
+  color: #2F5249;
+  border-color: #E3DE61;
+  transform: scale(1.05);
+}
+
+/* Active Page Button */
+.pagination-controls .btn.active {
+  background-color: #437057; /* Deep green */
+  color: #ffffff;
+  border-color: #437057;
+}
+

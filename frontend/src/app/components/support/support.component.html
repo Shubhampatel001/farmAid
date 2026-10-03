@@ -1,0 +1,15 @@
+<div class="page-wrapper">
+  <div class="container contact-container">
+    <h2>🤝 Need a Hand? We’ve Got a Tractor Full!</h2>
+    <form #contactForm="ngForm" (ngSubmit)="submitForm(contactForm)">
+      <input type="text" name="name" ngModel placeholder="Your Name" aria-label="Your name" required />
+      <input type="email" name="email" ngModel email placeholder="Your Email" aria-label="Your email" required />
+      <textarea class="message-box" name="message" ngModel placeholder="Your Message" aria-label="Your message" required minlength="10"></textarea>
+      <button type="submit" [disabled]="contactForm.invalid">Send Message 🚀</button>
+    </form>
+    @if (submitted()) {
+      <p class="success-msg">✅ Thanks! Our team will get back to you at the email you provided.</p>
+    }
+  </div>
+</div>
+<app-footer />

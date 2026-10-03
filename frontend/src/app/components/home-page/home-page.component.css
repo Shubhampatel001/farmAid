@@ -1,0 +1,149 @@
+#quoteCarousel {
+  max-width: 1000px;
+  margin: 1rem auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Ensure carousel items are fully transparent */
+.carousel-item {
+  background-color: transparent !important;
+}
+
+/* Ensure blockquote has no background or border */
+.carousel-item blockquote {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0;
+  padding: 1rem;
+}
+
+/* Optional: make text black and readable */
+.carousel-item blockquote p,
+.carousel-item blockquote footer {
+  color: #000 !important;
+  font-style: italic; 
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #quoteCarousel {
+    max-width: 90%;
+  }
+
+  .carousel-inner blockquote {
+    font-size: 1rem;
+    padding: 1rem;
+    font-style: italic;
+  }
+}
+
+
+
+ .homepage-wrapper {
+   display: flex;
+   flex-direction: column;
+   min-height: 100vh;
+ }
+
+ .homepage-main {
+   flex: 1;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+ }
+
+ /* Full-page background image */
+ .hero-section {
+   background: url('https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg') center center / cover no-repeat;
+   width: 100%;
+   min-height: 100vh;
+   opacity: 0.95;
+   padding-top: 2rem;
+ }
+
+ /* Content overlay */
+ .hero-content {
+   background-color: rgba(47, 82, 73, 0.7);
+   padding-top: 80px;
+   border-radius: 10px;
+   animation: fadeInUp 1.2s ease-out;
+    margin-top: 80px;
+ }
+
+ /* Feature Cards */
+ .feature-card {
+   opacity: 0.8;
+ }
+
+ .feature-icon {
+   color: #97B067;
+   animation: zoomIn 0.8s ease-out;
+ }
+
+ /* Button Hover */
+ .btn-warning:hover {
+   transform: scale(1.05);
+   transition: transform 0.3s ease-in-out;
+ }
+
+ /* Footer */
+ .homepage-footer {
+   background-color: #437057;
+   animation: fadeInUp 1.5s ease-out;
+ }
+
+ .feature-icon {
+   color: #f8c146;
+ }
+
+ .feature-card:hover {
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+   transform: scale(1.02);
+   transition: 0.3s ease;
+ }
+
+ .homepage-footer a:hover {
+   text-decoration: underline;
+   color: #ffd700;
+ }
+
+
+ /* Animations */
+ @keyframes fadeInUp {
+   from {
+     opacity: 0;
+     transform: translateY(30px);
+   }
+
+   to {
+     opacity: 1;
+     transform: translateY(0);
+   }
+ }
+
+ @keyframes zoomIn {
+   from {
+     transform: scale(0.8);
+     opacity: 0;
+   }
+
+   to {
+     transform: scale(1);
+     opacity: 1;
+   }
+ }
+
+ .homepage-footer {
+   background-color: #437057;
+   animation: fadeInUp 1.5s ease-out;
+ }
+
+ .homepage-footer img {
+   transition: transform 0.3s ease;
+ }
+
+ .homepage-footer img:hover {
+   transform: scale(1.1);
+ }

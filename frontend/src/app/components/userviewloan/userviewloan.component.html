@@ -1,0 +1,103 @@
+<button (click)="showCalculator.set(true)" class="toggle-btn" style="color: black;" title="EMI calculator" aria-label="Open EMI calculator">
+  <i class="bi bi-calculator" style="font-size: 2rem;"></i>
+</button>
+
+<div class="loan-container">
+  <h2 class="center">Loan Schemes</h2>
+  @if (!auth.isLoggedIn()) {
+    <p class="text-center text-muted">Browse freely – <a routerLink="/login">log in</a> or <a routerLink="/signup">register</a> to apply.</p>
+  }
+
+  <div class="filters">
+    <input type="text" placeholder="Search..." aria-label="Search loans" [ngModel]="keyword()" (ngModelChange)="keyword.set($event)" />
+    <select aria-label="Sort by" [ngModel]="sortKey()" (ngModelChange)="sortKey.set($event)">
+      <option value="loanType">Loan Type</option>
+      <option value="maximumAmount">Maximum Amount</option>
+      <option value="interestRate">Interest Rate</option>
+      <option value="repaymentTenure">Repayment Tenure</option>
+      <option value="eligibility">Eligibility</option>
+    </select>
+    <select aria-label="Sort order" [ngModel]="sortOrder()" (ngModelChange)="sortOrder.set($event)">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+  </div>
+
+  @if (loading()) {
+    <div class="text-center py-5"><span class="spinner-border text-success"></span></div>
+  } @else if (filtered().length === 0) {
+    <div class="alert alert-warning text-center">No loan schemes match your search.</div>
+  } @else {
+    <div class="table-responsive">
+      <table class="loan-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Loan Type</th>
+            <th>Maximum Amount (₹)</th>
+            <th>Interest Rate (%)</th>
+            <th>Tenure (months)</th>
+            <th>Eligibility</th>
+            <th>Documents</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (loan of pager.items(); track loan.loanId; let i = $index) {
+            <tr>
+              <td>{{ pager.offset() + i + 1 }}</td>
+              <td>{{ loan.loanType }}</td>
+              <td>{{ loan.maximumAmount | number }}</td>
+              <td>{{ loan.interestRate }}</td>
+              <td>{{ loan.repaymentTenure }}</td>
+              <td>{{ loan.eligibility }}</td>
+              <td>{{ loan.documentsRequired }}</td>
+              <td>{{ loan.description }}</td>
+              <td class="text-nowrap">
+                @if (!auth.isAdmin()) {
+                  <button class="btn btn-delete" (click)="onApply(loan.loanId)">Apply</button>
+                }
+                <button class="btn btn-sm btn-outline-secondary ms-1" (click)="openCalculator(loan)" title="Estimate EMI for this loan"><i class="bi bi-calculator"></i> EMI</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-pagination [page]="pager.page()" [totalPages]="pager.totalPages()" (pageChange)="pager.page.set($event)" />
+  }
+</div>
+
+@if (showCalculator()) {
+  <div class="modal-overlay" (click)="showCalculator.set(false)">
+    <div class="loan-calculator modal-content" (click)="$event.stopPropagation()" role="dialog" aria-label="Loan EMI calculator">
+      <h3>Loan EMI Calculator</h3>
+      <form #calculatorForm="ngForm" (ngSubmit)="calculateEMI()">
+        <div class="form-group">
+          <label for="principal">Principal Amount (₹)</label>
+          <input type="number" id="principal" name="principal" min="1" required [ngModel]="principal()" (ngModelChange)="principal.set($event)" />
+        </div>
+        <div class="form-group">
+          <label for="interestRate">Interest Rate (% p.a.)</label>
+          <input type="number" id="interestRate" name="interestRate" min="0" step="0.01" required [ngModel]="interestRate()" (ngModelChange)="interestRate.set($event)" />
+        </div>
+        <div class="form-group">
+          <label for="tenure">Tenure (months)</label>
+          <input type="number" id="tenure" name="tenure" min="1" required [ngModel]="tenure()" (ngModelChange)="tenure.set($event)" />
+        </div>
+        <button type="submit" [disabled]="calculatorForm.invalid">Calculate EMI</button>
+      </form>
+
+      @if (emi(); as result) {
+        <div class="emi-result">
+          <p><strong>Estimated EMI:</strong> ₹{{ result.emi | number: '1.2-2' }}</p>
+          <p><strong>Total Payable Amount:</strong> ₹{{ result.total | number: '1.2-2' }}</p>
+          <p><strong>Total Interest:</strong> ₹{{ result.total - result.principal | number: '1.2-2' }}</p>
+        </div>
+      }
+    </div>
+  </div>
+}
+<br><br>
+<app-footer />

@@ -1,0 +1,96 @@
+<div class="container-fluid px-3 px-md-4 py-3">
+  <h3 class="mb-4 text-center" style="color: #437057;">My Applied Loans</h3>
+
+  <div class="search-wrapper mb-3">
+    <div class="form-group">
+      <label for="searchInput" class="form-label">Search</label>
+      <input id="searchInput" type="text" class="form-control search-input" placeholder="Search by loan type or purpose"
+        [ngModel]="search()" (ngModelChange)="search.set($event)" />
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="text-center py-5"><span class="spinner-border text-success"></span></div>
+  } @else if (applications().length === 0) {
+    <div class="alert alert-warning text-center">
+      You haven't applied for any loans yet. <a routerLink="/loans">Browse loan schemes</a>
+    </div>
+  } @else if (filtered().length === 0) {
+    <div class="alert alert-info">No results found for this search.</div>
+  } @else {
+    <div class="table-wrapper table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Sl no</th>
+            <th>Submitted</th>
+            <th>Loan Type</th>
+            <th>Amount (₹)</th>
+            <th>Purpose</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (app of pager.items(); track app.loanApplicationId; let i = $index) {
+            <tr>
+              <td>{{ pager.offset() + i + 1 }}</td>
+              <td>{{ app.submissionDate | date: 'mediumDate' }}</td>
+              <td>{{ app.loan.loanType }}</td>
+              <td>{{ app.requestedAmount | number }}</td>
+              <td>{{ app.farmPurpose }}</td>
+              <td><app-status-badge [status]="app.status" /></td>
+              <td class="text-nowrap">
+                <button class="btn btn-sm btn-primary me-2" (click)="showDetails(app)">View</button>
+                <button class="btn btn-sm btn-danger" [disabled]="app.status !== 'PENDING'" (click)="toCancel.set(app)"
+                  [title]="app.status === 'PENDING' ? 'Cancel this application' : 'Only pending applications can be cancelled'">
+                  Cancel
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-pagination [page]="pager.page()" [totalPages]="pager.totalPages()" (pageChange)="pager.page.set($event)" />
+  }
+</div>
+<br><br>
+
+@if (selected(); as app) {
+  <app-modal title="Application Details" (closed)="selected.set(null)">
+    <p><strong>Status:</strong> <app-status-badge [status]="app.status" /></p>
+    @if (app.adminRemarks) {
+      <div class="alert" [class]="app.status === 'REJECTED' ? 'alert-danger' : 'alert-success'">
+        <strong>Remarks from the loan officer:</strong> {{ app.adminRemarks }}
+      </div>
+    }
+    <p><strong>Loan:</strong> {{ app.loan.loanType }} ({{ app.loan.interestRate }}% p.a., {{ app.loan.repaymentTenure }} months)</p>
+    <p><strong>Requested amount:</strong> ₹{{ app.requestedAmount | number }}</p>
+    <p><strong>Submitted:</strong> {{ app.submissionDate | date: 'mediumDate' }}</p>
+    <p><strong>State / District:</strong> {{ app.state }} / {{ app.district }}</p>
+    <p><strong>Location:</strong> {{ app.farmLocation }}</p>
+    <p><strong>Address:</strong> {{ app.farmerAddress }}</p>
+    <p><strong>Size:</strong> {{ app.farmSizeInAcres }} acres</p>
+    <p><strong>Document:</strong></p>
+    @if (loadingDocument()) {
+      <span class="spinner-border spinner-border-sm text-success"></span>
+    } @else if (app.file) {
+      <app-document-preview [file]="app.file" [fileName]="'application-' + app.loanApplicationId" />
+    }
+    <ng-container modal-footer>
+      <button class="btn btn-secondary" (click)="selected.set(null)">Close</button>
+    </ng-container>
+  </app-modal>
+}
+
+@if (toCancel(); as app) {
+  <app-modal title="Confirm Cancellation" variant="danger" (closed)="toCancel.set(null)">
+    Are you sure you want to cancel your <strong>{{ app.loan.loanType }}</strong> application?
+    <ng-container modal-footer>
+      <button type="button" class="btn btn-secondary" (click)="toCancel.set(null)">No</button>
+      <button type="button" class="btn btn-danger" [disabled]="cancelling()" (click)="confirmCancel(app)">Yes, Cancel</button>
+    </ng-container>
+  </app-modal>
+}
+<app-footer />

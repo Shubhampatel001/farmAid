@@ -1,0 +1,83 @@
+<div class="loan-container">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+    <h2 class="center mb-0">Loan Schemes</h2>
+    <a class="btn btn-success" routerLink="/admin/loans/new"><i class="bi bi-plus-lg me-1"></i>Add Loan</a>
+  </div>
+
+  <div class="filters">
+    <input type="text" placeholder="Search..." aria-label="Search loans" [ngModel]="keyword()" (ngModelChange)="keyword.set($event)" />
+    <select aria-label="Sort by" [ngModel]="sortKey()" (ngModelChange)="sortKey.set($event)">
+      <option value="loanType">Loan Type</option>
+      <option value="maximumAmount">Maximum Amount</option>
+      <option value="interestRate">Interest Rate</option>
+      <option value="repaymentTenure">Repayment Tenure</option>
+      <option value="eligibility">Eligibility</option>
+    </select>
+    <select aria-label="Sort order" [ngModel]="sortOrder()" (ngModelChange)="sortOrder.set($event)">
+      <option value="asc">ASC</option>
+      <option value="desc">DESC</option>
+    </select>
+  </div>
+
+  @if (loading()) {
+    <div class="text-center py-5"><span class="spinner-border text-success"></span></div>
+  } @else if (filtered().length === 0) {
+    <div class="alert alert-warning text-center">No loans found.</div>
+  } @else {
+    <div class="table-responsive">
+      <table class="loan-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Loan Type</th>
+            <th>Maximum Amount (₹)</th>
+            <th>Interest Rate (%)</th>
+            <th>Tenure (months)</th>
+            <th>Eligibility</th>
+            <th>Documents</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (loan of pager.items(); track loan.loanId; let i = $index) {
+            <tr [class.table-secondary]="!loan.active">
+              <td>{{ pager.offset() + i + 1 }}</td>
+              <td>{{ loan.loanType }}</td>
+              <td>{{ loan.maximumAmount | number }}</td>
+              <td>{{ loan.interestRate }}</td>
+              <td>{{ loan.repaymentTenure }}</td>
+              <td>{{ loan.eligibility }}</td>
+              <td>{{ loan.documentsRequired }}</td>
+              <td>{{ loan.description }}</td>
+              <td>
+                <span class="badge" [class]="loan.active ? 'text-bg-success' : 'text-bg-secondary'">{{ loan.active ? 'Active' : 'Inactive' }}</span>
+              </td>
+              <td class="text-nowrap">
+                <button class="btn btn-edit" [routerLink]="['/admin/loans', loan.loanId, 'edit']">Edit</button>
+                @if (loan.active) {
+                  <button class="btn btn-delete" (click)="toDeactivate.set(loan)">Deactivate</button>
+                } @else {
+                  <button class="btn btn-delete" [disabled]="busyId() === loan.loanId" (click)="setActive(loan, true)">Reactivate</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <app-pagination [page]="pager.page()" [totalPages]="pager.totalPages()" (pageChange)="pager.page.set($event)" />
+  }
+</div>
+
+@if (toDeactivate(); as loan) {
+  <app-modal title="Confirm Deactivation" variant="danger" (closed)="toDeactivate.set(null)">
+    Deactivate <strong>{{ loan.loanType }}</strong>? Farmers will no longer see or apply for it. Existing applications are kept,
+    and you can reactivate it at any time.
+    <ng-container modal-footer>
+      <button type="button" class="btn btn-secondary" (click)="toDeactivate.set(null)">Cancel</button>
+      <button type="button" class="btn btn-danger" [disabled]="busyId() === loan.loanId" (click)="setActive(loan, false)">Deactivate</button>
+    </ng-container>
+  </app-modal>
+}

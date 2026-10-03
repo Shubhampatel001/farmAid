@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:farmaid;MODE=MySQL;DATABASE_TO_LOWER=TRUE;NON_KEYWORDS=DATE,DATA,VALUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    show-sql: false
+    # H2 reports MySQL LONGTEXT as VARCHAR, so strict validation only runs against real MySQL.
+    hibernate:
+      ddl-auto: none
+
+app:
+  jwt:
+    secret: dGVzdC1vbmx5LXNlY3JldC1mb3ItZmFybWFpZC1pbnRlZ3JhdGlvbi10ZXN0cy0yNTY=
+  admin:
+    email: admin@test.local
+    password: Admin@12345
+
+logging:
+  level:
+    com.farmaid: INFO

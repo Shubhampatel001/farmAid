@@ -1,0 +1,17 @@
+@if (auth.isAdmin()) {
+  <app-adminnav />
+} @else if (auth.isUser()) {
+  <app-usernav />
+} @else {
+  <nav class="navbar shadow-sm" style="background-color: #437057;">
+    <div class="container-fluid flex-wrap gap-2">
+      <a class="navbar-brand fw-bold text-light" routerLink="/">🌾 FARM AID</a>
+
+      <div class="ms-auto d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-light" routerLink="/loans">View Loans</a>
+        <a class="btn btn-outline-light" routerLink="/login">Login</a>
+        <a class="btn btn-outline-warning" routerLink="/signup">Register</a>
+      </div>
+    </div>
+  </nav>
+}

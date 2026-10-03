@@ -1,0 +1,133 @@
+/* Page Title */
+h3 {
+  font-weight: 600;
+  color: #437057;
+  margin-bottom: 2rem;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+  padding-left: 30px;
+  padding-right: 30px;
+  margin: 0 auto;
+  max-width: 1200px;
+  overflow-x: auto;
+  background: linear-gradient(to right, #e8f5e9, #fffde7);
+}
+
+/* Search Input */
+.search-wrapper {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.search-input {
+  border: 2px solid #cde3d2;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+/* Alerts */
+.alert-warning,
+.alert-info {
+  text-align: center;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+/* Table Styling */
+.table {
+  background-color: #f9fdf9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th {
+  background-color: #e6f4ea;
+  color: #437057;
+  font-weight: 600;
+  text-align: center;
+}
+
+.table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #437057;
+  border-color: #437057;
+}
+
+.btn-primary:hover {
+  background-color: #365c49;
+  border-color: #365c49;
+}
+
+.btn-danger {
+  background-color: #a94442;
+  border-color: #a94442;
+}
+
+.btn-danger:hover {
+  background-color: #922d2b;
+  border-color: #922d2b;
+}
+
+/* Modal Styling */
+.modal.show {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  background-color: #e6f4ea;
+  border-bottom: 1px solid #cde3d2;
+}
+
+.modal-title {
+  color: #437057;
+  font-weight: 600;
+}
+
+.modal-footer .btn {
+  min-width: 100px;
+}
+
+.btn-close {
+  background-color: #437057;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
+
+/* Cancel Modal Specific */
+.modal-content.border-danger {
+  border: 2px solid #a94442;
+}
+
+.modal-header.bg-danger {
+  background-color: #a94442;
+  color: #fff;
+  border-bottom: none;
+}
+
+/* Image Preview */
+.img-thumbnail {
+  border: 2px solid #cde3d2;
+  border-radius: 8px;
+}
+.modal-header.bg-danger .modal-title {
+  color: #ffffff !important;
+}

@@ -48,10 +48,12 @@
     animation: fadeIn 1.2s ease-in-out;
 }
 
-.error-image {
-    max-width: 280px;
+.error-icon {
+    display: block;
+    font-size: 8rem;
+    line-height: 1;
+    color: #437057;
     margin-bottom: 30px;
-    border-radius: 8px;
     animation: zoomIn 0.6s ease-in-out;
 }
 

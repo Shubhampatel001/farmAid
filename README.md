@@ -56,10 +56,14 @@ On first start Flyway creates the schema and seeds four sample loan schemes, and
 The root `Dockerfile` builds a self-contained demo: the Angular site served by Spring Boot, an in-memory H2
 database and sample data. It needs **no database and no environment variables**, and data **resets on every restart**.
 
-```bash
-docker build -t farmaid-demo .
-docker run -p 8080:8080 farmaid-demo      # http://localhost:8080
-```
+With Docker Desktop running, start it in one of these ways:
+
+- **Windows:** double-click **`start-demo.cmd`**
+- **macOS / Linux:** `./start-demo.sh`
+- **Any OS:** `docker compose up demo` (add `--build` after pulling new code)
+
+Then open **http://localhost:8090** (the scripts open it for you when it's ready). Press **Ctrl+C** to stop.
+The first run builds the image and takes a few minutes; later runs start in seconds.
 
 Demo accounts (also shown on the login page):
 
@@ -116,6 +120,13 @@ Suggested low-cost setup: frontend on Cloudflare Pages / Netlify (SPA fallback t
 backend Docker image on Railway / Render / Fly.io with `SPRING_PROFILES_ACTIVE=prod`, and a managed MySQL database.
 Set `CORS_ALLOWED_ORIGINS` to the frontend URL, or set `apiUrl` in `frontend/src/environments/environment.prod.ts`
 if the API lives on another domain.
+
+## Image credits
+
+Photos in `frontend/public/images/` are free to use under their licences (no attribution required, credited anyway):
+
+- `farm-fields.jpg`: [Pexels photo 974314](https://www.pexels.com/photo/974314/) (Pexels License)
+- `vineyard-rows.jpg`: [Unsplash image 1563514227147-6d2ff665a6a0](https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0) (Unsplash License)
 
 ## Roadmap
 

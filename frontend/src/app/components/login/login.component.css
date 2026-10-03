@@ -5,9 +5,8 @@
   align-items: center;
   min-height: 100vh;
   background: linear-gradient(to right, #e8f5e9, #fffde7);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: relative;
-  padding-top: 80px; /* Adjust based on navbar height */
+  padding: 80px 16px 40px;
 }
 
 /* Card Layout */
@@ -24,17 +23,20 @@
 }
 
 /* Image Section (60%) */
+/* The photo always fills the full card height, however tall the form column grows. */
 .login-image {
   flex: 3;
   min-width: 60%;
   max-width: 60%;
-  height: 100%;
+  position: relative;
   padding: 0;
   overflow: hidden;
   background-color: #f1f8e9;
 }
 
 .login-image img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -127,6 +129,116 @@ input:focus {
 .btn-login:hover {
   background-color: #fdd835;
   transform: translateY(-2px);
+}
+
+.auth-switch {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.auth-switch a {
+  color: #2e7d32;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  color: #1b5e20;
+  text-decoration: underline;
+}
+
+/* Demo accounts (public demo build only) */
+.demo-accounts {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f1f8e9;
+  border: 1px dashed #a5d6a7;
+  border-radius: 12px;
+}
+
+.demo-title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.demo-title .bi {
+  margin-right: 6px;
+}
+
+.demo-hint {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: #666;
+}
+
+.demo-account {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 12px;
+  text-align: left;
+  background-color: #ffffff;
+  border: 1px solid #c8e6c9;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.demo-account:hover,
+.demo-account:focus-visible {
+  border-color: #81c784;
+  background-color: #e8f5e9;
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.demo-account-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-name {
+  font-weight: 600;
+  color: #1b5e20;
+}
+
+.demo-role {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: #c8e6c9;
+  color: #1b5e20;
+}
+
+.demo-role.admin {
+  background-color: #fbc02d;
+  color: #1b5e20;
+}
+
+.demo-email,
+.demo-note {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.demo-email {
+  margin-top: 2px;
+  font-size: 13px;
+  color: #388e3c;
+}
+
+.demo-note {
+  font-size: 12px;
+  color: #777;
 }
 
 /* Popups Between Navbar and Card */

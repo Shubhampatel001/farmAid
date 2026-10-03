@@ -1,5 +1,6 @@
 export interface DemoAccount {
-  label: string;
+  name: string;
+  role: 'Admin' | 'Farmer';
   email: string;
   password: string;
   note: string;

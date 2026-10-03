@@ -83,13 +83,27 @@
   display: inline-block;
 }
 
-/* Apply Button */
-.btn-delete {
-  background-color: #dc3545;
+/* Apply Button (primary action, theme green) */
+.btn-apply {
+  background-color: #437057;
 }
 
-.btn-delete:hover {
-  background-color: #b02a37;
+.btn-apply:hover {
+  background-color: #2f5240;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* EMI Button (secondary action, outlined) */
+.btn-emi {
+  background-color: white;
+  color: #437057;
+  border: 1px solid #437057;
+}
+
+.btn-emi:hover {
+  background-color: #e8f5e9;
+  color: #2f5240;
   transform: scale(1.05);
 }
 

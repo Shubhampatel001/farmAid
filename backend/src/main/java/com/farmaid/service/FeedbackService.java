@@ -7,7 +7,6 @@ import com.farmaid.exception.ResourceNotFoundException;
 import com.farmaid.mapper.Mappers;
 import com.farmaid.model.Feedback;
 import com.farmaid.repository.FeedbackRepository;
-import com.farmaid.security.AppUserPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,11 +46,12 @@ public class FeedbackService {
 				.toList();
 	}
 
+	/** Only the author can delete their feedback; others get 404 so feedback ids are not revealed. */
 	@Transactional
-	public void delete(Long feedbackId, AppUserPrincipal caller) {
+	public void delete(Long feedbackId, Long userId) {
 		Feedback feedback = feedbackRepository.findById(feedbackId)
 				.orElseThrow(() -> new ResourceNotFoundException(AppMessages.FEEDBACK_NOT_FOUND));
-		if (!caller.isAdmin() && !feedback.getUser().getUserId().equals(caller.id())) {
+		if (!feedback.getUser().getUserId().equals(userId)) {
 			throw new ResourceNotFoundException(AppMessages.FEEDBACK_NOT_FOUND);
 		}
 		feedbackRepository.delete(feedback);

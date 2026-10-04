@@ -202,9 +202,13 @@ class FarmAidApiIntegrationTest {
 		mvc.perform(auth(get("/api/feedback"), farmer)).andExpect(status().isForbidden());
 		mvc.perform(auth(get("/api/feedback"), adminToken)).andExpect(status().isOk());
 
+		// Admins can read feedback but never delete it; other farmers cannot see it exists.
+		mvc.perform(auth(delete("/api/feedback/" + id), adminToken)).andExpect(status().isForbidden());
 		mvc.perform(auth(delete("/api/feedback/" + id), other)).andExpect(status().isNotFound());
+		mvc.perform(auth(get("/api/feedback"), adminToken))
+				.andExpect(jsonPath("$[?(@.feedbackId == " + id + ")]").exists());
 		mvc.perform(auth(delete("/api/feedback/" + id), farmer)).andExpect(status().isNoContent());
-		mvc.perform(auth(delete("/api/feedback/" + id), adminToken)).andExpect(status().isNotFound());
+		mvc.perform(auth(get("/api/feedback/me"), farmer)).andExpect(jsonPath("$.length()").value(0));
 	}
 
 	@Test

@@ -7,7 +7,7 @@
 <div class="login-page">
   <div class="login-card">
     <div class="login-image">
-      <img src="https://www.jenjewell.ca/wp-content/uploads/2024/01/what-qualifies-as-a-farm-in-ontario.jpg" alt="Farm fields" />
+      <img src="/images/vineyard-rows.jpg" alt="Green rows of crops on a farm" />
     </div>
 
     <div class="login-form-section">
@@ -44,8 +44,25 @@
           @if (loading()) { <span class="spinner-border spinner-border-sm me-2"></span> }
           Login
         </button>
-        <p class="mt-3 mb-0 text-center">New to FarmAid? <a routerLink="/signup">Create an account</a></p>
+        <p class="auth-switch">New to FarmAid? <a routerLink="/signup">Create an account</a></p>
       </form>
+
+      @if (demoAccounts.length) {
+        <section class="demo-accounts" aria-labelledby="demo-title">
+          <h3 id="demo-title" class="demo-title"><i class="bi bi-people-fill"></i> Try a demo account</h3>
+          <p class="demo-hint">Click one to fill in the form. Sample data resets when the demo restarts.</p>
+          @for (account of demoAccounts; track account.email) {
+            <button type="button" class="demo-account" (click)="useDemoAccount(account)">
+              <span class="demo-account-top">
+                <span class="demo-name">{{ account.name }}</span>
+                <span class="demo-role" [class.admin]="account.role === 'Admin'">{{ account.role }}</span>
+              </span>
+              <span class="demo-email">{{ account.email }}</span>
+              <span class="demo-note">{{ account.note }}</span>
+            </button>
+          }
+        </section>
+      }
     </div>
   </div>
 </div>

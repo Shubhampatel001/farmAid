@@ -14,7 +14,7 @@
  
   /* Full-page background image */
   .hero-section {
-    background: url('https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg') center center / cover no-repeat;
+    background: url('/images/farm-fields.jpg') center center / cover no-repeat;
     width: 100%;
     min-height: 100vh;
     opacity: 0.95;

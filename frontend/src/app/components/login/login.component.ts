@@ -1,6 +1,8 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { DemoAccount } from '../../../environments/demo-account';
 import { errorMessage } from '../../core/http';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastService } from '../../core/services/toast.service';
@@ -27,6 +29,14 @@ export class LoginComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
+
+  /** Only populated in the public demo build (environment.demo.ts). */
+  protected readonly demoAccounts = environment.demoAccounts;
+
+  protected useDemoAccount(account: DemoAccount): void {
+    this.loginForm.setValue({ email: account.email, password: account.password });
+    this.errorMessage.set('');
+  }
 
   protected onLogin(): void {
     if (this.loginForm.invalid) {

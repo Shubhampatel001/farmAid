@@ -56,9 +56,9 @@
               <td>{{ loan.description }}</td>
               <td class="text-nowrap">
                 @if (!auth.isAdmin()) {
-                  <button class="btn btn-delete" (click)="onApply(loan.loanId)">Apply</button>
+                  <button class="btn btn-apply" (click)="onApply(loan.loanId)">Apply</button>
                 }
-                <button class="btn btn-sm btn-outline-secondary ms-1" (click)="openCalculator(loan)" title="Estimate EMI for this loan"><i class="bi bi-calculator"></i> EMI</button>
+                <button class="btn btn-emi" (click)="openCalculator(loan)" title="Estimate EMI for this loan"><i class="bi bi-calculator"></i> EMI</button>
               </td>
             </tr>
           }

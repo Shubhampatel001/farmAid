@@ -1,0 +1,15 @@
+{
+  "name": "FarmAid – Agricultural Loans for Farmers",
+  "short_name": "FarmAid",
+  "description": "Discover agricultural loan schemes, apply online and track your application.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#437057",
+  "background_color": "#e8f5e9",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

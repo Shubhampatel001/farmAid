@@ -94,11 +94,36 @@ src/
 │   ├── app.routes.ts          Routes (lazy-loaded) with guards
 │   └── app.config.ts          Providers: router, HTTP, interceptors, startup session check
 ├── environments/              API URL and demo accounts per build configuration
-├── index.html                 Page title, meta tags, fonts
+├── index.html                 Page title, description, icons, social sharing (Open Graph / Twitter) tags
 └── styles.css                 Global styles and theme colours
-public/
-└── images/                    Local images (see image credits in the main README)
+public/                        Copied as-is to the site root
+├── favicon.svg / favicon.ico  Browser tab icon (favicon.svg is the source artwork)
+├── apple-touch-icon.png, icon-*.png   Home-screen and app icons
+├── site.webmanifest           Name, colours and icons for "Add to home screen"
+├── og-image.jpg               Social sharing preview (1200×630)
+├── robots.txt                 Search engine rules
+└── images/                    Page photos (see image credits in the main README)
+branding/
+└── og-image.svg               Editable source of og-image.jpg
 ```
+
+### Branding and social sharing
+
+- **Brand colours:** green `#437057`, yellow `#fbc02d`, light green `#e8f5e9`. **Font:** Poppins.
+- **Social previews:** the Open Graph and Twitter tags in `src/index.html` use **absolute URLs**
+  (`https://farmaid-onhl.onrender.com/...`). If the site moves to another domain, update `og:url`, `og:image` and
+  `twitter:image` there. To check a preview after deploying, use a tool such as https://www.opengraph.xyz or
+  LinkedIn's Post Inspector.
+- **Regenerating the images:** edit `public/favicon.svg` or `branding/og-image.svg` (it uses the Poppins font),
+  then export them, for example with `rsvg-convert` / ImageMagick or Inkscape:
+
+  | File | From | Size |
+  |---|---|---|
+  | `favicon.ico` | `favicon.svg` | 16, 32 and 48 px in one file |
+  | `apple-touch-icon.png` | `favicon.svg` without rounded corners | 180 × 180 |
+  | `icon-192.png`, `icon-512.png` | `favicon.svg` | 192 and 512 px |
+  | `icon-maskable-512.png` | `favicon.svg`, square, wheat scaled to ~78 % | 512 × 512 |
+  | `og-image.jpg` | `branding/og-image.svg` | 1200 × 630, JPG quality ~85 |
 
 ## Routes and roles
 

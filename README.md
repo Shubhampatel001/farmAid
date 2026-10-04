@@ -5,6 +5,11 @@
 FarmAid is a web application that helps **farmers find agricultural loan schemes, apply online and track their
 applications**, while **loan officers (admins)** manage the schemes and approve or reject applications.
 
+### 🌐 Live demo: **https://farmaid-onhl.onrender.com**
+
+Log in with the demo accounts listed below. The demo runs on a free server that sleeps when unused,
+so the first visit can take about a minute to load.
+
 ---
 
 ## 🎯 Try it in 3 steps (Demo mode, no technical setup)
@@ -187,3 +192,5 @@ Photos in `frontend/public/images/` are free to use under their licences:
 
 - `farm-fields.jpg`: [Pexels photo 974314](https://www.pexels.com/photo/974314/) (Pexels License)
 - `vineyard-rows.jpg`: [Unsplash image](https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0) (Unsplash License)
+
+The FarmAid icon and the social sharing image (`og-image.jpg`, built from `farm-fields.jpg`) were made for this project.

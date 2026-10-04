@@ -27,6 +27,9 @@ server:
   port: ${PORT:8080}
   error:
     include-stacktrace: never
+  # For the bundled frontend (demo image): serve the web app manifest with its proper type.
+  mime-mappings:
+    webmanifest: application/manifest+json
 
 app:
   jwt:

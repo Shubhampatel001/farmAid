@@ -1,6 +1,7 @@
 # 🌾 FarmAid
 
 [![CI](https://github.com/Shubhampatel001/farmAid/actions/workflows/ci.yml/badge.svg)](https://github.com/Shubhampatel001/farmAid/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 FarmAid is a web application that helps **farmers find agricultural loan schemes, apply online and track their
 applications**, while **loan officers (admins)** manage the schemes and approve or reject applications.
@@ -194,3 +195,8 @@ Photos in `frontend/public/images/` are free to use under their licences:
 - `vineyard-rows.jpg`: [Unsplash image](https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0) (Unsplash License)
 
 The FarmAid icon and the social sharing image (`og-image.jpg`, built from `farm-fields.jpg`) were made for this project.
+
+## 📄 License
+
+FarmAid is released under the [MIT License](LICENSE): you may use, copy, modify and share it, including commercially,
+as long as the copyright and licence notice are kept. The photos listed above stay under their own licences.

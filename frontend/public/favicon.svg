@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="FarmAid">
+  <rect width="64" height="64" rx="14" fill="#437057"/>
+  <g fill="#fbc02d">
+    <path d="M32 55V19" stroke="#fbc02d" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="32" cy="13" rx="3.8" ry="6.8"/>
+    <ellipse cx="26" cy="21" rx="3.6" ry="6.8" transform="rotate(-38 26 21)"/>
+    <ellipse cx="38" cy="21" rx="3.6" ry="6.8" transform="rotate(38 38 21)"/>
+    <ellipse cx="26" cy="30" rx="3.6" ry="6.8" transform="rotate(-38 26 30)"/>
+    <ellipse cx="38" cy="30" rx="3.6" ry="6.8" transform="rotate(38 38 30)"/>
+    <ellipse cx="26" cy="39" rx="3.6" ry="6.8" transform="rotate(-38 26 39)"/>
+    <ellipse cx="38" cy="39" rx="3.6" ry="6.8" transform="rotate(38 38 39)"/>
+  </g>
+</svg>
